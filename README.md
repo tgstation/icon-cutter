@@ -4,8 +4,6 @@ icon-cutter is a library which creates .dmi files tailored to use with an 8-bit 
 
 A pre-compiled exe version can be found on the [releases page], but you can build your own from this repo at your preference.
 
-[releases page]: https://github.com/tgstation/icon-cutter/releases
-
 ## Dependencies
 
 The [Rust] compiler:
@@ -36,15 +34,19 @@ cargo build --release
 
 ## Running
 
-Simply drag your input .png file(s) onto the produced executable. You can also run it from the command line and provide the file paths as arguments.
+Simply drag your input .png file(s) onto the produced executable. You can also run it from the command line and provide the file path(s) as arguments.
 
-In addition, there needs to be a `config.yaml` file present in the executable's directory that complies with the format specified in `examples/config.yaml`.
+In addition, there needs to be a `config.yaml` file present in the executable's directory that complies with the format specified in `examples/config-documentation.yaml`.
 
 Example formats for the .png and config.yaml files can be found in `examples/`.
+All you have to do is copy the template and config file from one of them into the same folder in where the program will be executed.
+
+**Note:** The final products in dmi forms are fully functional but uncompressed. In order to reduce memory usage, open the DMI with DreamMaker and save it without changing anything. The file size should be noticeably reduced.
 
 If you're still having problems, ask in the [Coderbus Discord]'s
 `#tooling-questions` channel.
 
+[releases page]: https://github.com/tgstation/icon-cutter/releases
 [DM]: https://secure.byond.com/
 [Rust]: https://rust-lang.org
 [Cargo]: https://doc.rust-lang.org/cargo/
@@ -57,3 +59,4 @@ If you're still having problems, ask in the [Coderbus Discord]'s
 This project is licensed under the [AGPL license](https://en.wikipedia.org/wiki/Affero_General_Public_License).
 
 See [LICENSE](./LICENSE) for more details.
+
