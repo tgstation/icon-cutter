@@ -137,7 +137,7 @@ fn build_icons(
 		None => "icon".to_string(),
 	};
 
-	let mut assembled_icons: HashMap<u8, Vec<image::DynamicImage>> = HashMap::new();
+	let mut assembled_icons: config::ImageVecMap = HashMap::new();
 
 	for icon_signature in possible_icon_states.iter() {
 		let mut icon_state_images = vec![];

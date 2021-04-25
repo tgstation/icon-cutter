@@ -1,13 +1,15 @@
 use anyhow::bail;
 use anyhow::Result;
 use image::imageops;
-use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
+use std::{cmp::Ordering, collections::HashMap};
 use yaml_rust::YamlLoader;
 
 use super::glob;
+
+pub(crate) type ImageVecMap = HashMap<u8, Vec<image::DynamicImage>>;
 
 #[derive(Clone, PartialEq, Debug, Default)]
 pub struct PrefHolder {
@@ -79,8 +81,8 @@ impl PrefHolder {
 		input: std::io::Cursor<Vec<u8>>,
 		file_name: &str,
 	) -> Result<(
-		HashMap<u8, HashMap<u8, Vec<image::DynamicImage>>>,
-		HashMap<u8, Vec<image::DynamicImage>>,
+		HashMap<u8, ImageVecMap>,
+		ImageVecMap,
 	)> {
 		let img = image::load(input, image::ImageFormat::Png)?;
 
@@ -115,7 +117,7 @@ impl PrefHolder {
 			corners_length = glob::CORNER_TYPES_CARDINAL.len() as u32;
 		};
 
-		let mut corners: HashMap<u8, HashMap<u8, Vec<image::DynamicImage>>> = HashMap::new();
+		let mut corners: HashMap<u8, ImageVecMap> = HashMap::new();
 		for corner_dir in glob::CORNER_DIRS.iter() {
 			corners.insert(*corner_dir, HashMap::new());
 			for corner_type in corner_types.iter() {
@@ -142,10 +144,8 @@ impl PrefHolder {
 		}
 
 		if self.produce_corners {
-			let mut corners_image = image::DynamicImage::new_rgba8(
-				corners_length * self.icon_size_x,
-				1 * self.icon_size_y,
-			);
+			let mut corners_image =
+				image::DynamicImage::new_rgba8(corners_length * self.icon_size_x, self.icon_size_y);
 			let mut index = 0;
 			for corner_type in corner_types.iter() {
 				for frame in 0..self.frames_per_state {
@@ -158,7 +158,7 @@ impl PrefHolder {
 						&mut corners_image,
 						frame_img,
 						(index * self.icon_size_x) + self.west_start,
-						(0 * self.icon_size_y) + self.north_start,
+						self.north_start,
 					);
 					let frame_img = &corners
 						.get_mut(&glob::NE_INDEX)
@@ -169,7 +169,7 @@ impl PrefHolder {
 						&mut corners_image,
 						frame_img,
 						(index * self.icon_size_x) + self.east_start,
-						(0 * self.icon_size_y) + self.north_start,
+						self.north_start,
 					);
 					let frame_img = &corners
 						.get_mut(&glob::SE_INDEX)
@@ -180,7 +180,7 @@ impl PrefHolder {
 						&mut corners_image,
 						frame_img,
 						(index * self.icon_size_x) + self.east_start,
-						(0 * self.icon_size_y) + self.south_start,
+						self.south_start,
 					);
 					let frame_img = &corners
 						.get_mut(&glob::SW_INDEX)
@@ -191,7 +191,7 @@ impl PrefHolder {
 						&mut corners_image,
 						frame_img,
 						(index * self.icon_size_x) + self.west_start,
-						(0 * self.icon_size_y) + self.south_start,
+						self.south_start,
 					);
 					index += 1;
 				}
@@ -205,7 +205,7 @@ impl PrefHolder {
 				.unwrap();
 		};
 
-		let mut prefabs: HashMap<u8, Vec<image::DynamicImage>> = HashMap::new();
+		let mut prefabs: ImageVecMap = HashMap::new();
 		match &self.prefabs {
 			Some(thing) => {
 				for (signature, location) in thing {
@@ -773,25 +773,27 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 			for delay_value in yaml_delay.iter() {
 				delay_vec.push(delay_value.as_f64().unwrap() as f32);
 			}
-			if delay_vec.len() as u32 > frames_per_state {
-				bail!(
-			"Higher number of entries in the delay input ({}) than the frames_per_state value ({}). delay entries: {:?}",
-			delay_vec.len(), frames_per_state, delay_vec
-		);
-			} else if (delay_vec.len() as u32) < frames_per_state {
-				// Too few entries defined, we'll have to get creative and fill in the blanks.
-				if delay_vec.is_empty() {
-					for _frame in 0..frames_per_state {
-						delay_vec.push(1_f32) // List is empty, let's fill it with an arbitrary value.
+			match (delay_vec.len() as u32).cmp(&frames_per_state) {
+				Ordering::Equal => {}
+				Ordering::Greater => bail!(
+					"Higher number of entries in the delay input ({}) than the frames_per_state value ({}). delay entries: {:?}",
+					delay_vec.len(), frames_per_state, delay_vec
+				),
+				Ordering::Less => {
+					// Too few entries defined, we'll have to get creative and fill in the blanks.
+					if delay_vec.is_empty() {
+						for _frame in 0..frames_per_state {
+							delay_vec.push(1_f32) // List is empty, let's fill it with an arbitrary value.
+						}
+					} else {
+						for _frame in ((delay_vec.len() as u32)..frames_per_state).enumerate() {
+							let index = _frame.0;
+							let _frame = _frame.1;
+							delay_vec.push(delay_vec[index]); // We fill the list repeating the given pattern.
+						}
 					}
-				} else {
-					for _frame in ((delay_vec.len() as u32)..frames_per_state).enumerate() {
-						let index = _frame.0;
-						let _frame = _frame.1;
-						delay_vec.push(delay_vec[index]); // We fill the list repeating the given pattern.
-					}
-				};
-			};
+				}
+			}
 		};
 		delay = Some(delay_vec);
 	};
