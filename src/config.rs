@@ -80,10 +80,7 @@ impl PrefHolder {
 		&self,
 		input: std::io::Cursor<Vec<u8>>,
 		file_name: &str,
-	) -> Result<(
-		HashMap<u8, ImageVecMap>,
-		ImageVecMap,
-	)> {
+	) -> Result<(HashMap<u8, ImageVecMap>, ImageVecMap)> {
 		let img = image::load(input, image::ImageFormat::Png)?;
 
 		let img_dimensions = match &img {
