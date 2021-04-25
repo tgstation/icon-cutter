@@ -59,4 +59,3 @@ If you're still having problems, ask in the [Coderbus Discord]'s
 This project is licensed under the [AGPL license](https://en.wikipedia.org/wiki/Affero_General_Public_License).
 
 See [LICENSE](./LICENSE) for more details.
-
