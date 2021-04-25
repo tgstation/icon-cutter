@@ -1,13 +1,15 @@
 [package]
 name = "icon-cutter"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["L <rohesie@gmail.com>"]
 edition = "2018"
-
+license = "AGPL"
+description = "icon-cutter is a library which creates .dmi files tailored to use with an 8-bit bitmasking system for smooth icons in in the DM game programming language."
+homepage = "https://github.com/tgstation/icon-cutter"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-dmi = { git = "https://github.com/Rohesie/dmi" }
+dmi = { git = "https://github.com/spacestation13/dmi", version = "0.1" }
 anyhow = "1.0"
 image = "0.23"
 yaml-rust = "0.4"
