@@ -1,6 +1,5 @@
 use super::glob;
 use dmi::error;
-use std::collections::HashSet;
 
 pub fn smooth_dir_to_combination_key(smooth_dirs: u8, is_diagonal: bool) -> u8 {
 	let mut combination_key = glob::NONE;
@@ -185,16 +184,4 @@ pub fn trim_path_before_last_slash(mut text: String) -> String {
 	};
 	text.drain(..slash_offset);
 	text
-}
-
-pub fn hash_set_lazy_add(hash: Option<HashSet<u8>>, value: u8) -> Option<HashSet<u8>> {
-	let new_hash;
-	if hash == None {
-		new_hash = Some(HashSet::new());
-	} else {
-		new_hash = hash;
-	};
-	let mut unwrapped = new_hash.unwrap();
-	unwrapped.insert(value);
-	Some(unwrapped)
 }

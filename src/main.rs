@@ -41,14 +41,10 @@ fn main() {
 		return;
 	}
 
-	for image_path_string in args.iter().enumerate() {
-		let icons_built = image_path_string.0;
-		let image_path_string = image_path_string.1;
-
+	for (icons_built, image_path_string) in args.iter().enumerate() {
 		let path = Path::new(&image_path_string);
-		let mut file;
-		match File::open(&path) {
-			Ok(f) => file = f,
+		let mut file = match File::open(&path) {
+			Ok(f) => f,
 			Err(e) => {
 				println!("Wrong file path: {:#?}", e);
 				dont_disappear::any_key_to_continue::default();
@@ -88,9 +84,7 @@ fn build_icons(
 	prefs: &config::PrefHolder,
 	icons_built: usize,
 ) -> Result<bool> {
-	let corners_and_prefabs = prefs.build_corners_and_prefabs(input, &*file_string_path)?;
-	let corners = corners_and_prefabs.0;
-	let mounted_prefabs = corners_and_prefabs.1;
+	let (corners, mounted_prefabs) = prefs.build_corners_and_prefabs(input, &*file_string_path)?;
 
 	let possible_icon_states = prepare_icon_states(prefs.is_diagonal);
 
@@ -107,32 +101,30 @@ fn build_icons(
 		icon_directions = vec![glob::BYOND_SOUTH];
 	};
 
-	let output_name;
-	match &prefs.output_name {
+	let output_name = match &prefs.output_name {
 		Some(thing) => {
 			if icons_built == 0 {
-				output_name = thing.to_string();
+				thing.to_string()
 			} else {
-				output_name = format!("{}({})", &thing, icons_built + 1)
-			};
+				format!("{}({})", &thing, icons_built + 1)
+			}
 		}
 		None => {
 			if file_string_path.is_empty() {
 				if icons_built == 0 {
-					output_name = "output".to_string()
+					"output".to_string()
 				} else {
-					output_name = format!("output({})", icons_built + 1)
-				};
+					format!("output({})", icons_built + 1)
+				}
 			} else {
-				output_name = format!(
+				format!(
 					"{}-output",
 					helpers::trim_path_before_last_slash(file_string_path)
-				);
-			};
+				)
+			}
 		}
 	};
-	let icon_state_name;
-	icon_state_name = match &prefs.base_icon_state {
+	let icon_state_name = match &prefs.base_icon_state {
 		Some(thing) => thing.clone(),
 		None => "icon".to_string(),
 	};

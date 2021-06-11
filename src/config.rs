@@ -1,6 +1,6 @@
 use anyhow::bail;
 use anyhow::Result;
-use image::imageops;
+use image::{imageops, GenericImageView};
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
@@ -83,19 +83,7 @@ impl PrefHolder {
 	) -> Result<(HashMap<u8, ImageVecMap>, ImageVecMap)> {
 		let img = image::load(input, image::ImageFormat::Png)?;
 
-		let img_dimensions = match &img {
-			image::DynamicImage::ImageLuma8(inner_img) => inner_img.dimensions(),
-			image::DynamicImage::ImageLumaA8(inner_img) => inner_img.dimensions(),
-			image::DynamicImage::ImageRgb8(inner_img) => inner_img.dimensions(),
-			image::DynamicImage::ImageRgba8(inner_img) => inner_img.dimensions(),
-			image::DynamicImage::ImageBgr8(inner_img) => inner_img.dimensions(),
-			image::DynamicImage::ImageBgra8(inner_img) => inner_img.dimensions(),
-			image::DynamicImage::ImageLuma16(inner_img) => inner_img.dimensions(),
-			image::DynamicImage::ImageLumaA16(inner_img) => inner_img.dimensions(),
-			image::DynamicImage::ImageRgb16(inner_img) => inner_img.dimensions(),
-			image::DynamicImage::ImageRgba16(inner_img) => inner_img.dimensions(),
-		};
-
+		let img_dimensions = img.dimensions();
 		let width_in_frames = img_dimensions.0 / self.icon_size_x;
 		let height_in_frames = img_dimensions.1 / self.icon_size_y;
 
