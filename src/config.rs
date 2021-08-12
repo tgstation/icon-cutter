@@ -477,33 +477,33 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 	let docs = YamlLoader::load_from_str(&contents).unwrap();
 	let doc = &docs[0];
 
-	let se_convex = read_necessary_u32_config(&doc, "se_convex")?;
-	let nw_convex = read_necessary_u32_config(&doc, "nw_convex")?;
-	let ne_convex = read_necessary_u32_config(&doc, "ne_convex")?;
-	let sw_convex = read_necessary_u32_config(&doc, "sw_convex")?;
-	let se_concave = read_necessary_u32_config(&doc, "se_concave")?;
-	let nw_concave = read_necessary_u32_config(&doc, "nw_concave")?;
-	let ne_concave = read_necessary_u32_config(&doc, "ne_concave")?;
-	let sw_concave = read_necessary_u32_config(&doc, "sw_concave")?;
-	let se_horizontal = read_necessary_u32_config(&doc, "se_horizontal")?;
-	let nw_horizontal = read_necessary_u32_config(&doc, "nw_horizontal")?;
-	let ne_horizontal = read_necessary_u32_config(&doc, "ne_horizontal")?;
-	let sw_horizontal = read_necessary_u32_config(&doc, "sw_horizontal")?;
-	let se_vertical = read_necessary_u32_config(&doc, "se_vertical")?;
-	let nw_vertical = read_necessary_u32_config(&doc, "nw_vertical")?;
-	let ne_vertical = read_necessary_u32_config(&doc, "ne_vertical")?;
-	let sw_vertical = read_necessary_u32_config(&doc, "sw_vertical")?;
+	let se_convex = read_necessary_u32_config(doc, "se_convex")?;
+	let nw_convex = read_necessary_u32_config(doc, "nw_convex")?;
+	let ne_convex = read_necessary_u32_config(doc, "ne_convex")?;
+	let sw_convex = read_necessary_u32_config(doc, "sw_convex")?;
+	let se_concave = read_necessary_u32_config(doc, "se_concave")?;
+	let nw_concave = read_necessary_u32_config(doc, "nw_concave")?;
+	let ne_concave = read_necessary_u32_config(doc, "ne_concave")?;
+	let sw_concave = read_necessary_u32_config(doc, "sw_concave")?;
+	let se_horizontal = read_necessary_u32_config(doc, "se_horizontal")?;
+	let nw_horizontal = read_necessary_u32_config(doc, "nw_horizontal")?;
+	let ne_horizontal = read_necessary_u32_config(doc, "ne_horizontal")?;
+	let sw_horizontal = read_necessary_u32_config(doc, "sw_horizontal")?;
+	let se_vertical = read_necessary_u32_config(doc, "se_vertical")?;
+	let nw_vertical = read_necessary_u32_config(doc, "nw_vertical")?;
+	let ne_vertical = read_necessary_u32_config(doc, "ne_vertical")?;
+	let sw_vertical = read_necessary_u32_config(doc, "sw_vertical")?;
 
-	let se_flat = read_some_u32_config(&doc, "se_flat");
-	let nw_flat = read_some_u32_config(&doc, "nw_flat");
-	let ne_flat = read_some_u32_config(&doc, "ne_flat");
-	let sw_flat = read_some_u32_config(&doc, "sw_flat");
+	let se_flat = read_some_u32_config(doc, "se_flat");
+	let nw_flat = read_some_u32_config(doc, "nw_flat");
+	let ne_flat = read_some_u32_config(doc, "ne_flat");
+	let sw_flat = read_some_u32_config(doc, "sw_flat");
 
-	let file_to_open = read_some_string_config(&doc, "file_to_open");
-	let output_name = read_some_string_config(&doc, "output_name");
-	let base_icon_state = read_some_string_config(&doc, "base_icon_state");
+	let file_to_open = read_some_string_config(doc, "file_to_open");
+	let output_name = read_some_string_config(doc, "output_name");
+	let base_icon_state = read_some_string_config(doc, "base_icon_state");
 
-	let icon_size_x = match read_some_u32_config(&doc, "icon_size_x") {
+	let icon_size_x = match read_some_u32_config(doc, "icon_size_x") {
 		Some(thing) => {
 			if thing == 0 {
 				bail!("Unlawful value for icon_size_x: {}", thing);
@@ -513,7 +513,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		}
 		None => glob::TILE_SIZE,
 	};
-	let west_start = match read_some_u32_config(&doc, "west_start") {
+	let west_start = match read_some_u32_config(doc, "west_start") {
 		Some(thing) => {
 			if thing > icon_size_x {
 				bail!(
@@ -527,7 +527,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		}
 		None => glob::ORIGIN_X,
 	};
-	let west_end = match read_some_u32_config(&doc, "west_end") {
+	let west_end = match read_some_u32_config(doc, "west_end") {
 		Some(thing) => {
 			if thing > icon_size_x || thing < west_start {
 				bail!(
@@ -550,7 +550,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		}
 	};
 	let west_step = west_end - west_start;
-	let east_start = match read_some_u32_config(&doc, "east_start") {
+	let east_start = match read_some_u32_config(doc, "east_start") {
 		Some(thing) => {
 			if thing > icon_size_x || thing < west_end {
 				bail!(
@@ -563,7 +563,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		}
 		None => west_end,
 	};
-	let east_end = match read_some_u32_config(&doc, "east_end") {
+	let east_end = match read_some_u32_config(doc, "east_end") {
 		Some(thing) => {
 			if thing > icon_size_x || thing < east_start {
 				bail!(
@@ -578,7 +578,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 	};
 	let east_step = east_end - east_start;
 
-	let icon_size_y = match read_some_u32_config(&doc, "icon_size_y") {
+	let icon_size_y = match read_some_u32_config(doc, "icon_size_y") {
 		Some(thing) => {
 			if thing == 0 {
 				bail!("Unlawful value for icon_size_y: {}", thing);
@@ -588,7 +588,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		}
 		None => glob::TILE_SIZE,
 	};
-	let north_start = match read_some_u32_config(&doc, "north_start") {
+	let north_start = match read_some_u32_config(doc, "north_start") {
 		Some(thing) => {
 			if thing > icon_size_y {
 				bail!(
@@ -602,7 +602,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		}
 		None => glob::ORIGIN_Y,
 	};
-	let north_end = match read_some_u32_config(&doc, "north_end") {
+	let north_end = match read_some_u32_config(doc, "north_end") {
 		Some(thing) => {
 			if thing > icon_size_y || thing < north_start {
 				bail!(
@@ -625,7 +625,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		}
 	};
 	let north_step = north_end - north_start;
-	let south_start = match read_some_u32_config(&doc, "south_start") {
+	let south_start = match read_some_u32_config(doc, "south_start") {
 		Some(thing) => {
 			if thing > icon_size_y || thing < north_end {
 				bail!(
@@ -638,7 +638,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		}
 		None => north_end,
 	};
-	let south_end = match read_some_u32_config(&doc, "south_end") {
+	let south_end = match read_some_u32_config(doc, "south_end") {
 		Some(thing) => {
 			if thing > icon_size_y || thing < south_start {
 				bail!(
@@ -653,7 +653,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 	};
 	let south_step = south_end - south_start;
 
-	let output_icon_size_x = match read_some_u32_config(&doc, "output_icon_size_x") {
+	let output_icon_size_x = match read_some_u32_config(doc, "output_icon_size_x") {
 		Some(thing) => {
 			if thing == 0 {
 				bail!("Unlawful value for output_icon_size_x: {}", thing);
@@ -663,7 +663,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		}
 		None => icon_size_x,
 	};
-	let output_west_start = match read_some_u32_config(&doc, "output_west_start") {
+	let output_west_start = match read_some_u32_config(doc, "output_west_start") {
 		Some(thing) => {
 			if thing > output_icon_size_x + west_start - east_end {
 				bail!(
@@ -676,7 +676,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		}
 		None => glob::ORIGIN_X,
 	};
-	let output_east_start = match read_some_u32_config(&doc, "output_east_start") {
+	let output_east_start = match read_some_u32_config(doc, "output_east_start") {
 		Some(thing) => {
 			// east starting point cannot be larger than icon minus starting offset (output_west_start) minus the west corners' step (west_end - west_start).
 			if thing > output_icon_size_x - output_west_start - west_end + west_start {
@@ -691,7 +691,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		None => output_west_start + west_end - west_start,
 	};
 
-	let output_icon_size_y = match read_some_u32_config(&doc, "output_icon_size_y") {
+	let output_icon_size_y = match read_some_u32_config(doc, "output_icon_size_y") {
 		Some(thing) => {
 			if thing == 0 {
 				bail!("Unlawful value for output_icon_size_y: {}", thing);
@@ -701,7 +701,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		}
 		None => icon_size_y,
 	};
-	let output_north_start = match read_some_u32_config(&doc, "output_north_start") {
+	let output_north_start = match read_some_u32_config(doc, "output_north_start") {
 		Some(thing) => {
 			if thing > output_icon_size_y + north_start - south_end {
 				bail!(
@@ -714,7 +714,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		}
 		None => glob::ORIGIN_Y,
 	};
-	let output_south_start = match read_some_u32_config(&doc, "output_south_start") {
+	let output_south_start = match read_some_u32_config(doc, "output_south_start") {
 		Some(thing) => {
 			// south starting point cannot be larger than icon minus starting offset (output_north_start) minus the north corners' step (north_end - north_start).
 			if thing > output_icon_size_y - output_north_start - north_end + north_start {
@@ -729,7 +729,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		None => output_north_start + north_end - north_start,
 	};
 
-	let frames_per_state = match read_some_u32_config(&doc, "frames_per_state") {
+	let frames_per_state = match read_some_u32_config(doc, "frames_per_state") {
 		Some(thing) => {
 			if thing == 0 {
 				bail!("Unlawful value for frames_per_state: {}", thing);
