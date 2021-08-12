@@ -130,9 +130,11 @@ fn build_icons(
 			if file_string_path.is_empty() {
 				"icon".to_string()
 			} else {
-				helpers::trim_path_after_first_dot(helpers::trim_path_before_last_slash(file_string_path))
+				helpers::trim_path_after_first_dot(helpers::trim_path_before_last_slash(
+					file_string_path,
+				))
 			}
-		},
+		}
 	};
 
 	let mut assembled_icons: config::ImageVecMap = HashMap::new();
