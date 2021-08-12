@@ -869,7 +869,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		prefab_overlays = Some(overlays_map);
 	};
 
-	let dmi_version = match read_some_string_config(&doc, "dmi_version") {
+	let dmi_version = match read_some_string_config(doc, "dmi_version") {
 		Some(thing) => thing,
 		None => "4.0".to_string(),
 	};
