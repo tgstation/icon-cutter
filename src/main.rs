@@ -119,14 +119,20 @@ fn build_icons(
 			} else {
 				format!(
 					"{}-output",
-					helpers::trim_path_before_last_slash(file_string_path)
+					helpers::trim_path_before_last_slash(file_string_path.clone())
 				)
 			}
 		}
 	};
 	let icon_state_name = match &prefs.base_icon_state {
 		Some(thing) => thing.clone(),
-		None => "icon".to_string(),
+		None => {
+			if file_string_path.is_empty() {
+				"icon".to_string()
+			} else {
+				helpers::trim_path_after_first_dot(helpers::trim_path_before_last_slash(file_string_path))
+			}
+		},
 	};
 
 	let mut assembled_icons: config::ImageVecMap = HashMap::new();
