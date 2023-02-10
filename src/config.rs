@@ -142,8 +142,8 @@ impl PrefHolder {
 					imageops::replace(
 						&mut corners_image,
 						frame_img,
-						(index * self.icon_size_x) + self.west_start,
-						self.north_start,
+						((index * self.icon_size_x) + self.west_start).into(),
+						self.north_start.into(),
 					);
 					let frame_img = &corners
 						.get_mut(&glob::NE_INDEX)
@@ -153,8 +153,8 @@ impl PrefHolder {
 					imageops::replace(
 						&mut corners_image,
 						frame_img,
-						(index * self.icon_size_x) + self.east_start,
-						self.north_start,
+						((index * self.icon_size_x) + self.east_start).into(),
+						self.north_start.into(),
 					);
 					let frame_img = &corners
 						.get_mut(&glob::SE_INDEX)
@@ -164,8 +164,8 @@ impl PrefHolder {
 					imageops::replace(
 						&mut corners_image,
 						frame_img,
-						(index * self.icon_size_x) + self.east_start,
-						self.south_start,
+						((index * self.icon_size_x) + self.east_start).into(),
+						self.south_start.into(),
 					);
 					let frame_img = &corners
 						.get_mut(&glob::SW_INDEX)
@@ -175,8 +175,8 @@ impl PrefHolder {
 					imageops::replace(
 						&mut corners_image,
 						frame_img,
-						(index * self.icon_size_x) + self.west_start,
-						self.south_start,
+						((index * self.icon_size_x) + self.west_start).into(),
+						self.south_start.into(),
 					);
 					index += 1;
 				}

@@ -150,8 +150,8 @@ fn build_icons(
 				imageops::replace(
 					&mut image_frame,
 					&mounted_prefabs[icon_signature][frame as usize],
-					prefs.output_west_start,
-					prefs.output_north_start,
+					prefs.output_west_start.into(),
+					prefs.output_north_start.into(),
 				);
 				icon_state_images.push(image_frame);
 			}
@@ -172,8 +172,8 @@ fn build_icons(
 				imageops::overlay(
 					&mut image_frame,
 					corner_img,
-					prefs.output_west_start,
-					prefs.output_north_start,
+					prefs.output_west_start.into(),
+					prefs.output_north_start.into(),
 				);
 				let corner_img = &corners
 					.get(&glob::NE_INDEX)
@@ -186,8 +186,8 @@ fn build_icons(
 				imageops::overlay(
 					&mut image_frame,
 					corner_img,
-					prefs.output_east_start,
-					prefs.output_north_start,
+					prefs.output_east_start.into(),
+					prefs.output_north_start.into(),
 				);
 				let corner_img = &corners
 					.get(&glob::SE_INDEX)
@@ -200,8 +200,8 @@ fn build_icons(
 				imageops::overlay(
 					&mut image_frame,
 					corner_img,
-					prefs.output_east_start,
-					prefs.output_south_start,
+					prefs.output_east_start.into(),
+					prefs.output_south_start.into(),
 				);
 				let corner_img = &corners
 					.get(&glob::SW_INDEX)
@@ -214,8 +214,8 @@ fn build_icons(
 				imageops::overlay(
 					&mut image_frame,
 					corner_img,
-					prefs.output_west_start,
-					prefs.output_south_start,
+					prefs.output_west_start.into(),
+					prefs.output_south_start.into(),
 				);
 				icon_state_images.push(image_frame);
 			}
