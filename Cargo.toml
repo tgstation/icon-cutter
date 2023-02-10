@@ -9,7 +9,7 @@ homepage = "https://github.com/tgstation/icon-cutter"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-dmi = { git = "https://github.com/spacestation13/dmi", version = "0.1" }
+dmi = { git = "https://github.com/spacestation13/dmi", tag = "v0.1.1" }
 anyhow = "1.0"
 image = "0.23"
 yaml-rust = "0.4"
