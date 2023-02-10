@@ -780,7 +780,6 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		Some(delay_vec)
 	};
 
-	
 	let produce_corners: bool = if doc["produce_corners"].is_badvalue() {
 		false
 	} else {
@@ -792,7 +791,6 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 	} else {
 		doc["produce_dirs"].as_bool().unwrap_or(false)
 	};
-
 
 	let prefabs = if doc["prefabs"].is_badvalue() {
 		None
@@ -869,7 +867,8 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		None => "4.0".to_string(),
 	};
 
-	let is_diagonal = se_flat.is_some() && nw_flat.is_some() && ne_flat.is_some() && sw_flat.is_some();
+	let is_diagonal =
+		se_flat.is_some() && nw_flat.is_some() && ne_flat.is_some() && sw_flat.is_some();
 
 	Ok(PrefHolder {
 		file_to_open,

@@ -93,7 +93,7 @@ fn build_icons(
 		"prepare_icon_states() produced {} results",
 		number_of_icon_states
 	);
-	
+
 	let icon_directions = if prefs.produce_dirs {
 		glob::BYOND_CARDINALS.to_vec()
 	} else {
