@@ -463,12 +463,11 @@ pub fn read_some_string_config(source: &yaml_rust::yaml::Yaml, index: &str) -> O
 }
 
 pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
-	let config_path;
 	let last_slash = caller_path.rfind(|c| c == '/' || c == '\\');
-	if last_slash != None {
-		config_path = caller_path[..last_slash.unwrap()].to_string();
+	let config_path: String = if let Some(last_idx) = last_slash {
+		caller_path[..last_idx].to_string()
 	} else {
-		config_path = ".".to_string();
+		".".to_string()
 	};
 	let path = Path::new(&config_path).join("config.yaml");
 	let mut file = File::open(path)?;
@@ -740,9 +739,8 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		None => 1,
 	};
 
-	let delay;
-	if frames_per_state == 1 {
-		delay = None;
+	let delay = if frames_per_state == 1 {
+		None
 	} else {
 		let mut delay_vec = vec![];
 		if doc["delay"].is_badvalue() {
@@ -750,9 +748,8 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 				delay_vec.push(1_f32) // List is empty, let's fill it with an arbitrary value.
 			}
 		} else {
-			let yaml_delay;
-			match doc["delay"].as_vec() {
-					Some(thing) => yaml_delay = thing,
+			let yaml_delay = match doc["delay"].as_vec() {
+					Some(thing) => thing,
 					None => bail!("Delay config improperly set. Please look at the example files for the proper format. Contents: {:?}", doc["delay"])
 				};
 			for delay_value in yaml_delay.iter() {
@@ -780,26 +777,25 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 				}
 			}
 		};
-		delay = Some(delay_vec);
+		Some(delay_vec)
 	};
 
-	let produce_corners;
-	if doc["produce_corners"].is_badvalue() {
-		produce_corners = false;
+	
+	let produce_corners: bool = if doc["produce_corners"].is_badvalue() {
+		false
 	} else {
-		produce_corners = doc["produce_corners"].as_bool().unwrap_or(false)
+		doc["produce_corners"].as_bool().unwrap_or(false)
 	};
 
-	let produce_dirs;
-	if doc["produce_dirs"].is_badvalue() {
-		produce_dirs = false;
+	let produce_dirs: bool = if doc["produce_dirs"].is_badvalue() {
+		false
 	} else {
-		produce_dirs = doc["produce_dirs"].as_bool().unwrap_or(false)
+		doc["produce_dirs"].as_bool().unwrap_or(false)
 	};
 
-	let prefabs;
-	if doc["prefabs"].is_badvalue() {
-		prefabs = None;
+
+	let prefabs = if doc["prefabs"].is_badvalue() {
+		None
 	} else {
 		let mut prefab_map: HashMap<u8, u32> = HashMap::new();
 		let yaml_prefabs = match doc["prefabs"].as_hash() {
@@ -821,12 +817,11 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 			};
 			prefab_map.insert(signature, position);
 		}
-		prefabs = Some(prefab_map);
-	}
+		Some(prefab_map)
+	};
 
-	let prefab_overlays;
-	if doc["prefab_overlays"].is_badvalue() {
-		prefab_overlays = None;
+	let prefab_overlays = if doc["prefab_overlays"].is_badvalue() {
+		None
 	} else {
 		let mut overlays_map: HashMap<u8, Vec<u32>> = HashMap::new();
 		let yaml_prefab_overlays =  match doc["prefab_overlays"].as_hash() {
@@ -866,7 +861,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 			};
 			overlays_map.insert(signature, overlay_vec);
 		}
-		prefab_overlays = Some(overlays_map);
+		Some(overlays_map)
 	};
 
 	let dmi_version = match read_some_string_config(doc, "dmi_version") {
@@ -874,7 +869,7 @@ pub fn load_configs(caller_path: String) -> Result<PrefHolder> {
 		None => "4.0".to_string(),
 	};
 
-	let is_diagonal = se_flat != None && nw_flat != None && ne_flat != None && sw_flat != None;
+	let is_diagonal = se_flat.is_some() && nw_flat.is_some() && ne_flat.is_some() && sw_flat.is_some();
 
 	Ok(PrefHolder {
 		file_to_open,
