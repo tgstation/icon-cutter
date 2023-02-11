@@ -1,6 +1,6 @@
 [package]
 name = "icon-cutter"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["L <rohesie@gmail.com>"]
 edition = "2018"
 license = "AGPL"
@@ -9,8 +9,8 @@ homepage = "https://github.com/tgstation/icon-cutter"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-dmi = { git = "https://github.com/spacestation13/dmi", version = "0.1" }
+dmi = { git = "https://github.com/spacestation13/dmi", tag = "v0.2.1" }
 anyhow = "1.0"
-image = "0.23"
+image = "0.24"
 yaml-rust = "0.4"
 dont_disappear = "3.0"

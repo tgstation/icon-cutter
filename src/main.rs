@@ -20,9 +20,8 @@ fn main() {
 
 	let self_path = args.remove(0);
 
-	let prefs;
-	match config::load_configs(self_path) {
-		Ok(thing) => prefs = thing,
+	let prefs = match config::load_configs(self_path) {
+		Ok(thing) => thing,
 		Err(_e) => {
 			println!("Failed to load configs.\nSolution: add a properly-filled config.yaml file to the folder executing the program. Check the namesake folder for examples.");
 			dont_disappear::any_key_to_continue::default();
@@ -43,7 +42,7 @@ fn main() {
 
 	for (icons_built, image_path_string) in args.iter().enumerate() {
 		let path = Path::new(&image_path_string);
-		let mut file = match File::open(&path) {
+		let mut file = match File::open(path) {
 			Ok(f) => f,
 			Err(e) => {
 				println!("Wrong file path: {:#?}", e);
@@ -63,7 +62,7 @@ fn main() {
 
 		let dot_offset = image_path_string
 			.find('.')
-			.unwrap_or_else(|| image_path_string.len());
+			.unwrap_or(image_path_string.len());
 		formatted_file_name = formatted_file_name.drain(..dot_offset).collect(); //Here we remove everything after the dot. Whether .dmi or .png is the same for us.
 
 		let building_return = build_icons(cursor, formatted_file_name, &prefs, icons_built);
@@ -84,7 +83,7 @@ fn build_icons(
 	prefs: &config::PrefHolder,
 	icons_built: usize,
 ) -> Result<bool> {
-	let (corners, mounted_prefabs) = prefs.build_corners_and_prefabs(input, &*file_string_path)?;
+	let (corners, mounted_prefabs) = prefs.build_corners_and_prefabs(input, &file_string_path)?;
 
 	let possible_icon_states = prepare_icon_states(prefs.is_diagonal);
 
@@ -94,11 +93,11 @@ fn build_icons(
 		"prepare_icon_states() produced {} results",
 		number_of_icon_states
 	);
-	let icon_directions;
-	if prefs.produce_dirs {
-		icon_directions = glob::BYOND_CARDINALS.to_vec();
+
+	let icon_directions = if prefs.produce_dirs {
+		glob::BYOND_CARDINALS.to_vec()
 	} else {
-		icon_directions = vec![glob::BYOND_SOUTH];
+		vec![glob::BYOND_SOUTH]
 	};
 
 	let output_name = match &prefs.output_name {
@@ -150,8 +149,8 @@ fn build_icons(
 				imageops::replace(
 					&mut image_frame,
 					&mounted_prefabs[icon_signature][frame as usize],
-					prefs.output_west_start,
-					prefs.output_north_start,
+					prefs.output_west_start.into(),
+					prefs.output_north_start.into(),
 				);
 				icon_state_images.push(image_frame);
 			}
@@ -172,8 +171,8 @@ fn build_icons(
 				imageops::overlay(
 					&mut image_frame,
 					corner_img,
-					prefs.output_west_start,
-					prefs.output_north_start,
+					prefs.output_west_start.into(),
+					prefs.output_north_start.into(),
 				);
 				let corner_img = &corners
 					.get(&glob::NE_INDEX)
@@ -186,8 +185,8 @@ fn build_icons(
 				imageops::overlay(
 					&mut image_frame,
 					corner_img,
-					prefs.output_east_start,
-					prefs.output_north_start,
+					prefs.output_east_start.into(),
+					prefs.output_north_start.into(),
 				);
 				let corner_img = &corners
 					.get(&glob::SE_INDEX)
@@ -200,8 +199,8 @@ fn build_icons(
 				imageops::overlay(
 					&mut image_frame,
 					corner_img,
-					prefs.output_east_start,
-					prefs.output_south_start,
+					prefs.output_east_start.into(),
+					prefs.output_south_start.into(),
 				);
 				let corner_img = &corners
 					.get(&glob::SW_INDEX)
@@ -214,8 +213,8 @@ fn build_icons(
 				imageops::overlay(
 					&mut image_frame,
 					corner_img,
-					prefs.output_west_start,
-					prefs.output_south_start,
+					prefs.output_west_start.into(),
+					prefs.output_south_start.into(),
 				);
 				icon_state_images.push(image_frame);
 			}
@@ -255,7 +254,7 @@ fn build_icons(
 	};
 	let output_name = format!("{}.dmi", output_name);
 	let dmi_path = Path::new(&output_name);
-	let mut file = File::create(&dmi_path)?;
+	let mut file = File::create(dmi_path)?;
 	new_icon.save(&mut file)?;
 
 	println!(

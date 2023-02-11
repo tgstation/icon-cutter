@@ -167,7 +167,7 @@ pub fn dir_offset_signature(icon_signature: u8, byond_dir: u8) -> Result<u8, dmi
 
 ///Takes everything that comes before the first dot in the string, discarding the rest.
 pub fn trim_path_after_first_dot(mut text: String) -> String {
-	let dot_offset = text.find('.').unwrap_or_else(|| text.len());
+	let dot_offset = text.find('.').unwrap_or(text.len());
 	text.drain(dot_offset..); //.collect();
 	text
 }
