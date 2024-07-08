@@ -5,7 +5,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
 use std::{cmp::Ordering, collections::HashMap};
-use yaml_rust::YamlLoader;
+use yaml_rust2::YamlLoader;
 
 use super::glob;
 
@@ -428,7 +428,7 @@ impl PrefHolder {
 	}
 }
 
-pub fn read_some_u32_config(source: &yaml_rust::yaml::Yaml, index: &str) -> Option<u32> {
+pub fn read_some_u32_config(source: &yaml_rust2::yaml::Yaml, index: &str) -> Option<u32> {
 	let config = &source[index];
 	if config.is_badvalue() {
 		return None;
@@ -437,7 +437,7 @@ pub fn read_some_u32_config(source: &yaml_rust::yaml::Yaml, index: &str) -> Opti
 	source[index].as_i64().map(|thing| thing as u32)
 }
 
-pub fn read_necessary_u32_config(source: &yaml_rust::yaml::Yaml, index: &str) -> Result<u32> {
+pub fn read_necessary_u32_config(source: &yaml_rust2::yaml::Yaml, index: &str) -> Result<u32> {
 	let config = &source[index];
 	if config.is_badvalue() {
 		bail!("Undefined value for {}. This is a necessary config. Please check config.yaml in the examples folder for documentation.", index);
@@ -453,7 +453,7 @@ pub fn read_necessary_u32_config(source: &yaml_rust::yaml::Yaml, index: &str) ->
 	};
 }
 
-pub fn read_some_string_config(source: &yaml_rust::yaml::Yaml, index: &str) -> Option<String> {
+pub fn read_some_string_config(source: &yaml_rust2::yaml::Yaml, index: &str) -> Option<String> {
 	let config = &source[index];
 	if config.is_badvalue() {
 		return None;
