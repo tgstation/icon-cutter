@@ -443,14 +443,14 @@ pub fn read_necessary_u32_config(source: &yaml_rust2::yaml::Yaml, index: &str) -
 		bail!("Undefined value for {}. This is a necessary config. Please check config.yaml in the examples folder for documentation.", index);
 	};
 
-	return match source[index].as_i64() {
+	match source[index].as_i64() {
 		Some(thing) => Ok(thing as u32),
 		None => bail!(
 			"Unlawful value for {}, not a proper number: ({:?})",
 			index,
 			source[index]
 		),
-	};
+	}
 }
 
 pub fn read_some_string_config(source: &yaml_rust2::yaml::Yaml, index: &str) -> Option<String> {
